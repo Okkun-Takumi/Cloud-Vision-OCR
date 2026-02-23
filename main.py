@@ -48,14 +48,16 @@ if file:
     )
 
     result = response.json()
+    st.write(result)
 
-    try:
 
-        text = result["responses"][0]["textAnnotations"][0]["description"]
+    # try:
 
-        st.subheader("OCR Result")
+    #     text = result["responses"][0]["textAnnotations"][0]["description"]
 
-        st.write(text)
+    #     st.subheader("OCR Result")
 
-    except:
-        st.write("文字が検出されませんでした")
+    #     st.write(text)
+
+    # except:
+    #     st.write("文字が検出されませんでした")
