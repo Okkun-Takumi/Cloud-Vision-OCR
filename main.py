@@ -19,33 +19,42 @@ if file:
     # API KEY
     api_key = st.secrets["VISION_API_KEY"]
 
-    # Vision API client
-    client = vision.ImageAnnotatorClient(
-        client_options={
-            "api_key": api_key
-        }
+    # base64変換
+    content = base64.b64encode(
+        file.getvalue()
+    ).decode("utf-8")
+
+    url = f"https://vision.googleapis.com/v1/images:annotate?key={api_key}"
+
+    request_body = {
+        "requests":[
+            {
+                "image":{
+                    "content":content
+                },
+                "features":[
+                    {
+                        "type":"TEXT_DETECTION"
+                    }
+                ]
+            }
+        ]
+    }
+
+    response = requests.post(
+        url,
+        json=request_body
     )
 
-    # バイトデータ取得
-    content = file.read()
+    result = response.json()
 
-    image = vision.Image(
-        content=content
-    )
+    try:
 
-    # OCR実行
-    response = client.text_detection(
-        image=image
-    )
-
-    texts = response.text_annotations
-
-    # 結果表示
-    if texts:
+        text = result["responses"][0]["textAnnotations"][0]["description"]
 
         st.subheader("OCR Result")
 
-        st.write(texts[0].description)
+        st.write(text)
 
-    else:
+    except:
         st.write("文字が検出されませんでした")
