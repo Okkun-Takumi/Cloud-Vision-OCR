@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from google.cloud import vision
 from google.oauth2 import service_account
+import requests
 
 import base64
 
